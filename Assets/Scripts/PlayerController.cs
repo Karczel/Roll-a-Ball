@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private int count;
     public TextMeshProUGUI countText;
     public GameObject winTextObject;
+    public Button playAgain;
 
 
 
@@ -21,10 +23,18 @@ public class PlayerController : MonoBehaviour
     {
          // Get and store the Rigidbody component attached to the player.
         rb = GetComponent<Rigidbody>();
+
+        // Smoother control
+        rb.mass = 1f;
+        rb.linearDamping = 0.01f; 
+        rb.angularDamping = 0.01f; 
+        rb.interpolation = RigidbodyInterpolation.Interpolate; 
+
         count = 0;
 
         SetCountText();
         winTextObject.SetActive(false);
+        playAgain.gameObject.SetActive(false);
     }
 
     void OnMove(InputValue movementValue)
@@ -41,10 +51,10 @@ public class PlayerController : MonoBehaviour
     {
         countText.text = "Count: " + count.ToString();
         if(count >= 12)
-        {
+        { // Win
             winTextObject.SetActive(true);
             DisableEnemies();
-
+            playAgain.gameObject.SetActive(true);
         }
     }
 
